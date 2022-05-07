@@ -1,158 +1,151 @@
-# Title
+# King County House Sales - Project 2
 
-**Authors**: Annie Liu
+![house](./images/house.jpg)
+
+**Author**: Annie Liu
 
 ## Overview
 
-[A one-paragraph overview of the project, including the business problem, data, methods, results and recommendations]
+King County Real Estate agency want to provide advice to homeowners or potential buyers about how certain homes might increase the estimated value of these homes. This project analyses different features such as living space, grade or whether the property has waterfront views, as well as the time of sale which could affect the property price value.
+From this, we put forward the following recommendations to King County Real Estate to consider when advising their clients:
 
-Microsoft wish to create a new movie studio, but have limited knowledge about creating movies. This project analyzes different types of movie genres, seasonal profitability and budget vs ratings. From this, we put forward the following recommendations to Microsoft to consider when producing movies;
-* By categorizing each genre by count, Microsoft can consider producing Drama films which appear to be most popular, followed by Comedy and Action
-* Microsoft can consider producing movies during these periods; mid-year and November (as they yield highest profitability)
-* By comparing budget and average ratings, there is some corrleation that higher budgets can return higher average ratings   
+* Data shows that greater the interior living space (sqft_living), higher the property value.
+
+* The average highest selling price was between April and June, with February the lowest. 
+
+* Properties that had waterfront views were evidently more expensive than non-waterfront views.
+
+We included these features to predict house prices based on unseen testing data. Feature selection to determine which model predicted most accurately. 
 
 ## Business Problem
 
-[Summary of the business problem you are trying to solve, and the data questions that you plan to answer in order to solve them.]
-Due to Microsoft having limited knowledge of the movie industry, we ask the following questions to help us solve the business problem for Microsoft.
+We ask the following questions to help King County to better advise their clients.
 
 ***
-Questions to consider:
+Questions considered:
 * What are the business's pain points related to this project?
-Microsoft unfamiliar with movie industry and therefore unsure of what types of movies to produce. We look at movie characteristics such as genre, profitability, time of year, budget and ratings to aid us in solving this.
+
+King County need to be able to provide factual evidence of what homes are likely to generate greater return for homeowners/buyers. By understanding this, King County clients will be more confident in their renovation or buying decisions.
+We look price as the constant variable and assess which features have greater impact on price to aid us in solving this.
+
 * How did you pick the data analysis question(s) that you did?
-Genre, financials and ratings datasets all seem like reasonable factors that could impact the success of a film.
+
+Interior living space (Sqft_living), overall (quality, construction and design level) grade given to each home (grade) and typically homes that have waterfront views are more expensive (waterfront). These all seem like reasonable factors that could impact the price of a property.
+
 * Why are these questions important from a business perspective?
-By answering these questions, Microsoft can make better assumptions on the types of movie genres to produce, when to produce them and how to potentially increase ratings.
+
+By answering these questions, King County can make better assumptions with their clients on the types of properties to invest in, or features to add/remote and how to when to buy or sell.
+
 ***
 
 ## Data
 
-[Describe the data being used for this project.]
-Three different datasets (from IMDB and The Numbers) and have been used for this analysis.
+One data (kc_house_data) was used for this analysis.
 
 ***
-Questions to consider:
+Questions considered:
+
 * Where did the data come from, and how do they relate to the data analysis questions?
-IMBD.title.basics: dataset represents substantial columns/variables which includes; movie title, year, runtime and genres.
-IMBD.title.ratings: Additional info such as average rating and number of votes.
-TN.movie_budgets: Includes movie release date, budget and gross.
-We targeted the following variables; movie (name of the movie), genres (type of genre), averagerating(movie average rating), 
-release_date(movie release date), production_budget(production budget) and worldwide_gross(international revenue).
+
+Kc_house_data represents property data; price, date home was sold, price sold, no. of bedrooms and bathrooms, square ft living space, square ft of land space, no. of floors, waterfront view, condition, grade, sq ft of interior housing space (exl. basement), sq ft of basement, year built, year renovated, zipcode, latitude and longitude coordinates, sq ft of interior housing living space of nearest 15 neighbours and sq ft of the land lots of nearest 15 neighbours.
+
+We targeted the following variables: sqft_living, sqft_lot, date and waterfront against price.
 
 ***
 
 ## Methods
 
-[Describe the process for analyzing or modeling the data. For Phase 1, this will be descriptive analysis.]
+Preparation, analysis and modelling the data.
 
 ***
-Questions to consider:
-* How did you prepare, analyze or model the data?
-Imported all three sets of data, merged and removed irrelevant columns/variables, duplicate columns were also removed.
-The genre variable had missing values, this has been filled with the most frequent value from that column. Production_budget and 
-worldwid_gross columns were converted from objects to integers.
 
-There are multiple movies with blended movie genres, we split the genres to form a list with only the unique genres and the count for each.
-A bar plot visulization gives us the results of genre popularity from 'Genre by Count in movies', which allows Microsoft to determine which
-types of genres they could produce.
+Data was imported and performed exploratory data analysis and visualisations. Removed outliers, created a 'month_sold' column from 'date'.
 
-From a profitability perspectie, despite there lacking a variable/column for profit, we determine this by substracting production_budget from 
-worldwide_gross. A new 'Profit' column is created and added into a dataframe which includes; release_date, worldwide_gross and 
-production_budget. This begs the question 'what would profitability look like across different times of the year?.'
-Another 'release_month' column is created by associating a 'DatetimeIndex' against the release_date. This lists all the release dates by months
-in digits (i.e. January = 1, February = 2, March = 3 etc.). We find the minimum release_date which determines how far back the release date
-goes, this gives indication to age and relevancy of the data. The release_month is then grouped by their month and a mean function is
-applied returning the average of the remaining columns in each month. This allows us to assess the release months without duplicates.
-A boxplot of 'Movies - Time of Year and profitability' highlights the fluctuations on profitability across the twelve months in a year.
-Microsoft can better assess when they wish to produce movies based on seasonality, they can also further question why certain months incur
-higher profitability i.e. Is it during school holidays, festive seasons etc?
+Made assumptions on linear regression and assessed if any correlations between price and nominated features.
 
-Finally, we looked average rating and wondered if there might be any correlation to production_budget i.e. Can a higher budget present higher
-rating score? The averagerating is sorted in ascending order to allow visibility of the range we are working with. A scatter plot will help
-visualize the spread, however, there the immense data has created a very dense scatter plot. 
-As we were working with a large dataset, the mean function was applied again (new column created for the new ratings as whole numbers). 
-By grouping the new average rating column, when mapped on a scatter plot the density issue is no longer present. It is clear that there is
-some correlation between budget and ratings. When budgeting for movies, Microsoft can factor this in as it can impact their movie ratings. 
-   
+Feature engineering that could help with final model predictions. Made hypotheses based on selected features against target variable (price); month_sold, age of propertyan and waterfront.
+
+Model with Train-test split to assess model fitment to data. We use a baseline to find the worst fit to compare against the models later.
+
+Model 1 adopted most features that would impact price, we assessed the fitment and prediction then use feature selection to drop features.
+
+Determined R-Squared and feature coeffiecients, used Sklean to fit model to training data. Predict on y and find RMSE for model performance on training data. Applied same on testing data and generate RMSE. RMSE comparison between the two data sets and determine which is underfit/overfit.
+
+Applied feature selection to create another iteration of model 2 and improve RMSE, dropped grade as it seemed to have highest correlations. 
+
+Final model we can generalize it on the holdout set housing_features.csv. The model's predictions were also exported as `housing_predictions.csv'.
+
 ***
 
 ## Results
 
-[Present your key results. For Phase 1, this will be findings from your descriptive analysis.]
-
-***
-Questions to consider:
-* How do you interpret the results?
-By interpreting the results we found that by genre count, Drama was exceptionally popular followed by Comedy and Action. The lowest ranking was
-Western, Muscial and War.
-
-When interpreting seasonalities, mid-year seems to yield highest profit (particularly in June). November also yields well towards end of the 
-year.
-
-Budget vs ratings whilst not a perfect correlation, the scatter chart certainly indicates a relatively strong relationship and therefore
-we generalize that a movie budget can influence it's rating score.
-
-* [How confident are you that your results would generalize beyond the data you have?]
-Our generalizations have good grounding based off the data we have and therefore can aid to enabling Microsoft to determine their areas of
-interest. There is a mammouth amount of data (as it has been extracted from the past 10 years). By analysing data from the past 10 years would 
-give us with more viable insights than if it were only past couple of years. We have used data that had minimal duplicates and missing values 
-to avoid skewing the data. We still had an overwhelmingly large dataset which produced very dense visualizations. Only under this 
-circumstance did we aggregate data with an average to help us better visualize trends. 
+Interpreting the results.
 
 ***
 
-Here is an example of how to embed images from your sub-folder:
+We found that  most house prices were sub $1 mil.
+
+By interpreting the results, we found that living space had high correlations with price. So greater the living space, higher the property price. Land space had no visible correlations surprisingly. 
+
+February had lowest house price sales, with highest prices in April to June.
+
+We also found that properties with waterfront views cost more than non waterfronts.
+
+Our generalizations have good grounding based off the data we have and therefore can aid to King County Real Estate to better advise their clients. There is a mammoth amount of data, we have used data that may have been sold more than once. Filled null values with median and dropped unncessary columns. There were also data that 33 bedrooms  which seems unreasonable given the size of the property, we had a closer look and most properties were between 1-6 bedrooms. So we removed some unlikely bedroom data.
+
+***
 
 ### Visualizations
 
-Genre popularity (by count)
-![graph1])./images/genre_count.png)
+![sqftliving](./images/sqft_living_price.png)
 
-Budget vs Rating (large data)
-![graph2])./images/budget_rating.png)
+Living space has high relationship with property prices.
 
-Budget vs Rating (mean data)
-![graph3])./images/budget_rating2.png)
+![Sqftlot](./images/sqft_lot_price.png)
 
-Profit seasonality
-![graph4])./images/season_profit.png)
+Land of space has no visible relationship with prices.
 
-![graph1](./images/viz1.png)
+![season](./images/season_price.png)
+
+Seasonality vs Price (Feb being lowest selling price, with highest between April and June.
+
+![waterfront](./images/waterfront_price.png)
+
+Non waterfront vs. Waterfront (where waterfront properties are valued for more).
+
 
 ## Conclusions
 
-[Provide your conclusions about the work you've done, including any limitations or next steps.]
-The business problem is very broad at this stage. To determine what movies to produce, we need to determine what Microsoft defines as movies
-they would want to produce. In this analysis we made very broad assumptions. Whilst we can generalize that genre seems to be the most popular 
-genre produced, there are many other factors which can contribute to the data. For example, why are drama movies most commonly produced? 
-We are uncertain at this stage, therefore we cannot generalize for example that drama movies would produce good return for Microsoft. Perhaps
-Drama films might have influence on number of votes and therefore creates more hype or publicity with more viewers engaging with these types of
-movies. These are hyperthetical assumptions.
+In this analysis we made broad some initial assumptions to help define our questions and find our answers. 
+Whilst we can generalize that these features can impact property prices, there are many other factors which can contribute to the data. For example, an interest hike or economic recession in the market could likely impact these trends.
+Therefore, these are predictions based upon the statistical data we have been provided with.
 
-Based of the proven results in our analysis, we recommend the following:
+From the results in our analysis, we recommend the following:
 
-### Recommendation 1
-Produce drama, comedy and/or action related movies.
+#### Recommendation 1
 
-### Recommendation 2
-Release movies around between May and July (or November towards end of the year) as it yields higher profitability.
+Look for larger living spaces for greater return on properties.
 
-### Recommendation 3
-Increase movie budgets for better ratings.
+#### Recommendation 2
 
-There could be other variables that Microsoft would be interested in understanding to better establish the types of movies to produce. Such as
-analysing from a local perspective, whilst these results are worldwide data, local revenue might have a different rules. Microsoft might also
-want to determine the types of studios and Directors/team that they would want on their production. These are all factors that can influence 
-our current data. Microsoft should take into account that this is was an international analysis (as Microsoft is an international company).
-Having a bigger picture of the landscape, we can drill down further. It would also be interesting to assess if there is any correlation between
-genre and num votes or what drives number of votes? Additional data may be required for further analysis.
+Buy during lower months such as February, and sell during higher months April to June.
+
+#### Recommendation 3
+
+Ideally invest in waterfront properties (over non waterfront).
+
+
+### Next Steps
+
+There could be other variables that King County might be interested in, such as location. Perhaps there are certain catchment/locals that perform better than others depending on the types of amenities and facilities available.
+
+These are all factors that can influence our current data. Having a bigger picture of the landscape, we can drill down further. 
 
 ***
 
 ## For More Information
 
-Please review our full analysis in [our Jupyter Notebook](./Microsoft-Movie-Analysis.ipynb) or our [presentation](./Microsoft-Movie-Analysis_AL-Presentation.pdf).
+Please review our full analysis in [our Jupyter Notebook](./King-County-House-Sales.ipynb) or our [presentation](./King County House Sales_Presentation.pdf).
 
 For any additional questions, please contact **Annie Liu at annieliu1989@yahoo.com**
 
@@ -161,9 +154,11 @@ For any additional questions, please contact **Annie Liu at annieliu1989@yahoo.c
 Describe the structure of your repository and its contents, for example:
 
 ```
-├── README.md                           <- The top-level README for reviewers of this project
-├── dsc-phase1-project-template.ipynb   <- Narrative documentation of analysis in Jupyter notebook
-├── DS_Project_Presentation.pdf         <- PDF version of project presentation
-├── data                                <- Both sourced externally and generated from code
-└── images                              <- Both sourced externally and generated from code
+├── data                           
+├── images         
+├── King-County-House-Salaes.ipnb    
+├── King County House Sales_Presentation.pdf	              
+├── Notebook.pdf				          
+├── README.md                        
+├── Github.pdf
 ```
