@@ -156,7 +156,7 @@ Describe the structure of your repository and its contents, for example:
 ```
 ├── data                           
 ├── images         
-├── King-County-House-Sales.ipnb    
+├── King-County-House-Sales.ipynb    
 ├── King County House Sales_Presentation.pdf	              
 ├── Notebook.pdf				          
 ├── README.md                        
